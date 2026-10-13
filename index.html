@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#18221b" />
+    <meta name="description" content="A focused daily task board for quartermaster work." />
+    <title>Quartermaster Desk</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" role="img">
+              <path d="M5.5 9.5 16 4l10.5 5.5v13L16 28 5.5 22.5z" />
+              <path d="m5.5 9.5 10.5 5.7 10.5-5.7M16 15.2V28" />
+            </svg>
+          </div>
+          <div>
+            <span class="eyebrow">LOGISTICS</span>
+            <strong>Quartermaster<br />Desk</strong>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Task views">
+          <button class="nav-item is-active" data-view="all" type="button">
+            <span class="nav-icon" aria-hidden="true">▦</span>
+            <span>Open tasks</span>
+            <span class="nav-count" data-count="all">0</span>
+          </button>
+          <button class="nav-item" data-view="today" type="button">
+            <span class="nav-icon" aria-hidden="true">◷</span>
+            <span>Today</span>
+            <span class="nav-count" data-count="today">0</span>
+          </button>
+          <button class="nav-item" data-view="upcoming" type="button">
+            <span class="nav-icon" aria-hidden="true">↗</span>
+            <span>Upcoming</span>
+            <span class="nav-count" data-count="upcoming">0</span>
+          </button>
+          <button class="nav-item" data-view="completed" type="button">
+            <span class="nav-icon" aria-hidden="true">✓</span>
+            <span>Completed</span>
+            <span class="nav-count" data-count="completed">0</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-note">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Saved on this device</strong>
+            <p>Your list stays in this browser.</p>
+          </div>
+        </div>
+
+        <p class="security-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8.8 7 10 4.2-1.2 7-5.4 7-10V6z" /><path d="M9 12.2 11 14l4-4" /></svg>
+          Do not enter classified, operational, or sensitive personal information.
+        </p>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="date-line" id="currentDate"></p>
+            <h1 id="viewTitle">Ready for the day.</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="menu-wrap">
+              <button class="icon-button" id="moreButton" type="button" aria-label="Data options" aria-expanded="false">•••</button>
+              <div class="data-menu" id="dataMenu" hidden>
+                <button id="exportButton" type="button">Export backup</button>
+                <button id="importButton" type="button">Import backup</button>
+                <input id="importInput" type="file" accept="application/json" hidden />
+              </div>
+            </div>
+            <button class="primary-button" id="addTaskButton" type="button">
+              <span aria-hidden="true">＋</span> Add task
+            </button>
+          </div>
+        </header>
+
+        <section class="stats-grid" aria-label="Task summary">
+          <article class="stat-card">
+            <div class="stat-icon olive" aria-hidden="true">□</div>
+            <div>
+              <span>Open tasks</span>
+              <strong id="openStat">0</strong>
+            </div>
+            <small id="openDetail">All clear</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon amber" aria-hidden="true">◷</div>
+            <div>
+              <span>Due today</span>
+              <strong id="todayStat">0</strong>
+            </div>
+            <small id="todayDetail">Nothing urgent</small>
+          </article>
+          <article class="stat-card progress-card">
+            <div class="stat-icon green" aria-hidden="true">✓</div>
+            <div>
+              <span>Completion</span>
+              <strong id="progressStat">0%</strong>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+          </article>
+        </section>
+
+        <section class="board" aria-labelledby="listHeading">
+          <div class="board-header">
+            <div>
+              <p class="section-kicker">TASK BOARD</p>
+              <h2 id="listHeading">Open tasks</h2>
+            </div>
+            <button class="text-button" id="clearCompletedButton" type="button">Clear completed</button>
+          </div>
+
+          <div class="toolbar">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+              <span class="sr-only">Search tasks</span>
+              <input id="searchInput" type="search" placeholder="Search tasks…" autocomplete="off" />
+              <kbd>/</kbd>
+            </label>
+            <label class="select-wrap">
+              <span class="sr-only">Filter by category</span>
+              <select id="categoryFilter">
+                <option value="all">All categories</option>
+                <option value="Inventory">Inventory</option>
+                <option value="Issue & return">Issue &amp; return</option>
+                <option value="Orders">Orders</option>
+                <option value="Administration">Administration</option>
+                <option value="Facilities">Facilities</option>
+              </select>
+            </label>
+            <label class="select-wrap">
+              <span class="sr-only">Filter by priority</span>
+              <select id="priorityFilter">
+                <option value="all">All priorities</option>
+                <option value="high">High priority</option>
+                <option value="medium">Medium priority</option>
+                <option value="low">Low priority</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="task-list" id="taskList" aria-live="polite"></div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <div class="empty-mark" aria-hidden="true">✓</div>
+            <h3 id="emptyTitle">All clear</h3>
+            <p id="emptyMessage">No tasks match this view.</p>
+            <button class="secondary-button" id="emptyAddButton" type="button">Add a task</button>
+          </div>
+        </section>
+
+        <footer class="footer-bar">
+          <span>Quartermaster Desk</span>
+          <span><kbd>N</kbd> new task · <kbd>/</kbd> search</span>
+        </footer>
+      </main>
+    </div>
+
+    <dialog class="task-dialog" id="taskDialog">
+      <form method="dialog" id="taskForm">
+        <div class="dialog-header">
+          <div>
+            <p class="section-kicker">TASK DETAILS</p>
+            <h2 id="dialogTitle">Add a task</h2>
+          </div>
+          <button class="close-button" id="closeDialogButton" value="cancel" type="button" aria-label="Close">×</button>
+        </div>
+
+        <input id="taskId" type="hidden" />
+        <label class="form-field title-field">
+          <span>Task</span>
+          <input id="taskTitle" name="title" type="text" maxlength="120" placeholder="e.g. Check uniform stock levels" required />
+        </label>
+
+        <div class="form-grid">
+          <label class="form-field">
+            <span>Category</span>
+            <select id="taskCategory" name="category">
+              <option value="Inventory">Inventory</option>
+              <option value="Issue & return">Issue &amp; return</option>
+              <option value="Orders">Orders</option>
+              <option value="Administration">Administration</option>
+              <option value="Facilities">Facilities</option>
+            </select>
+          </label>
+          <label class="form-field">
+            <span>Due date</span>
+            <input id="taskDue" name="due" type="date" />
+          </label>
+        </div>
+
+        <fieldset class="priority-picker">
+          <legend>Priority</legend>
+          <label><input type="radio" name="priority" value="low" /><span>Low</span></label>
+          <label><input type="radio" name="priority" value="medium" checked /><span>Medium</span></label>
+          <label><input type="radio" name="priority" value="high" /><span>High</span></label>
+        </fieldset>
+
+        <label class="form-field">
+          <span>Notes <em>optional</em></span>
+          <textarea id="taskNotes" name="notes" rows="4" maxlength="500" placeholder="Add a short checklist, reference, or reminder…"></textarea>
+        </label>
+
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancelDialogButton" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Save task</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
